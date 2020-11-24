@@ -1,7 +1,29 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
+  <component name="BranchesTreeState">
+    <expand>
+      <path>
+        <item name="ROOT" type="e8cecc67:BranchNodeDescriptor" />
+        <item name="LOCAL_ROOT" type="e8cecc67:BranchNodeDescriptor" />
+      </path>
+      <path>
+        <item name="ROOT" type="e8cecc67:BranchNodeDescriptor" />
+        <item name="REMOTE_ROOT" type="e8cecc67:BranchNodeDescriptor" />
+      </path>
+      <path>
+        <item name="ROOT" type="e8cecc67:BranchNodeDescriptor" />
+        <item name="REMOTE_ROOT" type="e8cecc67:BranchNodeDescriptor" />
+        <item name="GROUP_NODE:origin" type="e8cecc67:BranchNodeDescriptor" />
+      </path>
+    </expand>
+    <select />
+  </component>
   <component name="ChangeListManager">
-    <list default="true" id="b570816f-50d0-4ade-a991-7c7b4369f40d" name="Default Changelist" comment="" />
+    <list default="true" id="b570816f-50d0-4ade-a991-7c7b4369f40d" name="Default Changelist" comment="">
+      <change afterPath="$PROJECT_DIR$/.gitignore" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/README.md" beforeDir="false" afterPath="$PROJECT_DIR$/README.md" afterDir="false" />
+    </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -48,11 +70,32 @@
       <option name="number" value="Default" />
       <option name="presentableId" value="Default" />
       <updated>1606230174218</updated>
-      <workItem from="1606230175295" duration="328000" />
+      <workItem from="1606230175295" duration="719000" />
     </task>
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
     <option name="version" value="3" />
+  </component>
+  <component name="Vcs.Log.Tabs.Properties">
+    <option name="TAB_STATES">
+      <map>
+        <entry key="MAIN">
+          <value>
+            <State />
+          </value>
+        </entry>
+      </map>
+    </option>
+  </component>
+  <component name="WindowStateProjectService">
+    <state x="144" y="92" key="MergeDialog" timestamp="1606230873308">
+      <screen x="0" y="23" width="1440" height="814" />
+    </state>
+    <state x="144" y="92" key="MergeDialog/0.23.1440.814@0.23.1440.814" timestamp="1606230873308" />
+    <state x="360" y="197" key="MultipleFileMergeDialog" timestamp="1606230876178">
+      <screen x="0" y="23" width="1440" height="814" />
+    </state>
+    <state x="360" y="197" key="MultipleFileMergeDialog/0.23.1440.814@0.23.1440.814" timestamp="1606230876178" />
   </component>
 </project>
