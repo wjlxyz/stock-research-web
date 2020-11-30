@@ -17,36 +17,37 @@
             <el-aside width="200px" style="background-color: rgb(238, 241, 246)">
                 <el-menu :default-openeds="['1']" :unique-opened="true">
                     <el-submenu index="1">
-                        <template slot="title"><i class="el-icon-menu"></i>宏观研究</template>
+                        <template slot="title"><v-link href="/macrosearch"><i class="el-icon-menu"></i>宏观研究</v-link></template>
                     </el-submenu>
                     <el-submenu index="2">
-                        <template slot="title"><i class="el-icon-menu"></i>行业研报</template>
+                        <template slot="title"><v-link href="/industryreport"><i class="el-icon-menu"></i>行业研报</v-link></template>
                     </el-submenu>
                     <el-submenu index="3">
-                        <template slot="title"><i class="el-icon-menu"></i>个股研报</template>
+                        <template slot="title"><v-link href="/stockreport"><i class="el-icon-menu"></i>个股研报</v-link></template>
                     </el-submenu>
                     <el-submenu index="4">
-                        <template slot="title"><i class="el-icon-menu"></i>策略报告</template>
+                        <template slot="title"><v-link href="/strategyreport"><i class="el-icon-menu"></i>策略报告</v-link></template>
                     </el-submenu>
                     <el-submenu index="5">
-                        <template slot="title"><i class="el-icon-menu"></i>券商晨会</template>
+                        <template slot="title"><v-link href="/brokermorningbriefing"><i class="el-icon-menu"></i>券商晨会</v-link></template>
                     </el-submenu>
                 </el-menu>
             </el-aside>
             <el-container>
-                <el-main>
-                    <Report></Report>
-                </el-main>
+                <slot></slot>
+<!--                <el-main>-->
+<!--                    <Report></Report>-->
+<!--                </el-main>-->
             </el-container>
         </el-container>
     </div>
 </template>
 
 <script>
-    import Report from "./Report";
+    import VLink from "@/components/VLink";
     export default {
-        name: 'HelloWorld',
-        components: {Report}
+        name: 'HomePage',
+        components: {VLink}
     }
 </script>
 
