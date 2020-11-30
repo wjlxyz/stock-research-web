@@ -11,7 +11,7 @@ Vue.config.productionTip = false
 Vue.use(ElementUI)
 locale.use(lang)
 Vue.use(VueDataTables)
-Vue.use(axios)
+Vue.prototype.$ajax=axios
 new Vue({
   render: h => h(App),
 }).$mount('#app')
