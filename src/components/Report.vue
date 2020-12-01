@@ -57,7 +57,7 @@
 
     export default {
         name: "Report",
-        beforeMount() {
+        created() {
             this.loadData()
         },
         data() {
@@ -93,7 +93,10 @@
                                 picker.$emit('pick', [start.getTime(), end.getTime()]);
                             }
                         }
-                    ]
+                    ],
+                    disabledDate: (time) => {
+                        return time.getTime() > Date.now()
+                    }
                 },
                 dateRangeValue: [new Date().getTime() - 1000 * 3600 * 24 * 7, new Date().getTime()],
                 titles: [
@@ -116,6 +119,7 @@
         },
         methods: {
             loadData() {
+                let that = this
                 const url = 'http://reportapi.eastmoney.com/report/jg?'
                     + '&pageSize=5'
                     + '&beginTime='
@@ -128,14 +132,14 @@
                 axios.get(url).then(response => {
                     const responseData = response.data.data
                     for (let i = 0; i < responseData.length; i++) {
-                        this.tableData[i] = {
+                        that.tableData[i] = {
                             'report_title': responseData[i]['title'],
                             'broker_name': responseData[i]['orgSName'],
                             'publish_date': responseData[i]['publishDate'],
                             'rate': ''
                         }
                     }
-                    console.log(this.tableData)
+                    console.log(that.tableData)
                 })
             }
         }
