@@ -16,10 +16,10 @@
         <el-container style="height: 100%; border: 1px solid #eee">
             <el-aside width="200px" style="background-color: rgb(238, 241, 246)">
                 <el-menu :default-openeds="['1']" :unique-opened="true">
-                    <el-submenu index="1">
+                    <el-submenu index="1"  @click="showClick(1)">
                         <template slot="title"><v-link href="/macrosearch"><i class="el-icon-menu"></i>宏观研究</v-link></template>
                     </el-submenu>
-                    <el-submenu index="2">
+                    <el-submenu index="2"  @click="showClick(2)">
                         <template slot="title"><v-link href="/industryreport"><i class="el-icon-menu"></i>行业研报</v-link></template>
                     </el-submenu>
                     <el-submenu index="3">
@@ -34,10 +34,13 @@
                 </el-menu>
             </el-aside>
             <el-container>
-                <slot></slot>
-<!--                <el-main>-->
-<!--                    <Report></Report>-->
-<!--                </el-main>-->
+                <el-main>
+                    <MacroSearch v-bind:class="showIndex === 1 ? 'show' : 'not-show'"></MacroSearch>
+                    <IndustryReport v-bind:class="showIndex === 2 ? 'show' : 'not-show'"></IndustryReport>
+                    <StockReport v-bind:class="showIndex === 3 ? 'show' : 'not-show'"></StockReport>
+                    <StrategyReport v-bind:class="showIndex === 4 ? 'show' : 'not-show'"></StrategyReport>
+                    <BrokerMorningBriefing v-bind:class="showIndex === 5 ? 'show' : 'not-show'"></BrokerMorningBriefing>
+                </el-main>
             </el-container>
         </el-container>
     </div>
@@ -45,9 +48,27 @@
 
 <script>
     import VLink from "@/components/VLink";
+    import MacroSearch from "@/pages/MacroSearch";
+    import IndustryReport from "@/pages/IndustryReport";
+    import StockReport from "@/pages/StockReport";
+    import StrategyReport from "@/pages/StrategyReport";
+    import BrokerMorningBriefing from "@/pages/BrokerMorningBriefing";
     export default {
         name: 'HomePage',
-        components: {VLink}
+        data() {
+            return {
+                showIndex: 1
+            }
+        },
+        components: {BrokerMorningBriefing, StrategyReport, StockReport, IndustryReport, MacroSearch, VLink},
+        methods: {
+            showClick: function(index) {
+                console.log(this)
+                this.showIndex = index
+                alert(index)
+                console.log(this.showIndex)
+            }
+        }
     }
 </script>
 
@@ -62,6 +83,12 @@
     color: #333;
     text-align: center;
     line-height: 60px;
+}
+.not-show {
+  display: none;
+}
+.show {
+  display: block;
 }
 
 </style>
