@@ -6,28 +6,18 @@ import lang from 'element-ui/lib/locale/lang/zh-CN'
 import locale from "element-ui/lib/locale";
 import VueDataTables from 'vue-data-tables'
 import axios from 'axios'
-import routes from "@/routes";
+import router from "./router";
 
 Vue.config.productionTip = false
 Vue.use(ElementUI)
 locale.use(lang)
 Vue.use(VueDataTables)
 Vue.prototype.$ajax=axios
-const app = new Vue({
+
+new Vue({
   el: '#app',
-  data: {
-    currentRoute: window.location.pathname
-  },
-  computed: {
-    ViewComponent () {
-      const matchingView = routes[this.currentRoute]
-      return require('./pages/' + matchingView + '.vue')
-    }
-  },
+  router,
+  components: {App},
   render: h => h(App),
 }).$mount('#app')
-
-window.addEventListener('popstate', () => {
-  app.currentRoute = window.location.pathname
-})
 
