@@ -12,7 +12,6 @@
                 </el-select>
             </div>
             <div>
-                <p>{{response}}</p>
                 <span class="demonstration">请选择时间范围</span>
                 <el-date-picker
                         v-model="dateRangeValue"
@@ -23,7 +22,6 @@
                         start-placeholder="开始日期"
                         end-placeholder="结束日期"
                         format="yyyy 年 MM 月 dd 日"
-                        value-format="yyyy-MM-dd"
                         :picker-options="pickerOptions">
                 </el-date-picker>
             </div>
@@ -42,7 +40,7 @@
         </div>
 
         <div>
-            <data-tables :data="data" :filters="filters">
+            <data-tables :data="tableData" :filters="filters">
                 <el-table-column
                         v-for="title in titles"
                         :prop="title.prop"
@@ -59,21 +57,8 @@
 
     export default {
         name: "Report",
-        created() {
-            const url = 'http://reportapi.eastmoney.com/report/jg?'
-                + '&pageSize=5'
-                + '&beginTime='
-                + '&endTime='
-                + '&pageNo=1'
-                + '&fields='
-                + '&qType=3'
-                + '&orgCode=80055521'
-                + '&_=1605007898254'
-            axios.get(url).then(response => {
-                this.response = response;
-                console.log(response)
-            })
-
+        beforeMount() {
+            this.loadData()
         },
         data() {
             return {
@@ -89,7 +74,7 @@
                                 const end = new Date();
                                 const start = new Date();
                                 start.setTime(start.getTime() - 1000 * 3600 * 24 * 7);
-                                picker.$emit('pick', [start, end]);
+                                picker.$emit('pick', [start.getTime(), end.getTime()]);
                             }
                         }, {
                             text: '最近一个月',
@@ -97,7 +82,7 @@
                                 const end = new Date();
                                 const start = new Date();
                                 start.setTime(start.getTime() - 1000 * 3600 * 24 * 30);
-                                picker.$emit('pick', [start, end]);
+                                picker.$emit('pick', [start.getTime(), end.getTime()]);
                             }
                         }, {
                             text: '最近三个月',
@@ -105,16 +90,12 @@
                                 const end = new Date();
                                 const start = new Date();
                                 start.setTime(start.getTime() - 1000 * 3600 * 24 * 90);
-                                picker.$emit('pick', [start, end]);
+                                picker.$emit('pick', [start.getTime(), end.getTime()]);
                             }
                         }
                     ]
                 },
-                dateRangeValue: '',
-                data: [
-                    {report_title: '大国重器', broker_name: '平安证券', publish_date: '2020-10-11', rate: '持有'},
-                    {report_title: '大国软蛋', broker_name: '哈喽证券', publish_date: '2020-11-11', rate: '买入'}
-                ],
+                dateRangeValue: [new Date().getTime() - 1000 * 3600 * 24 * 7, new Date().getTime()],
                 titles: [
                     {prop: 'report_title', label: '研报标题'},
                     {prop: 'broker_name', label: '券商'},
@@ -130,10 +111,34 @@
                         value: ''
                     }
                 ],
-                response: ''
+                tableData: []
             }
         },
-        methods: {}
+        methods: {
+            loadData() {
+                const url = 'http://reportapi.eastmoney.com/report/jg?'
+                    + '&pageSize=5'
+                    + '&beginTime='
+                    + '&endTime='
+                    + '&pageNo=1'
+                    + '&fields='
+                    + '&qType=3'
+                    + '&orgCode=80055521'
+                    + '&_=1605007898254'
+                axios.get(url).then(response => {
+                    const responseData = response.data.data
+                    for (let i = 0; i < responseData.length; i++) {
+                        this.tableData[i] = {
+                            'report_title': responseData[i]['title'],
+                            'broker_name': responseData[i]['orgSName'],
+                            'publish_date': responseData[i]['publishDate'],
+                            'rate': ''
+                        }
+                    }
+                    console.log(this.tableData)
+                })
+            }
+        }
     }
 </script>
 
