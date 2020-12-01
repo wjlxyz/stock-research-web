@@ -1,10 +1,12 @@
 <template>
-  <div>MacroSearch</div>
+    <Report></Report>
 </template>
 
 <script>
+import Report from "../components/Report";
 export default {
-    name: "MacroSearch"
+    name: "MacroSearch",
+  components: {Report}
 }
 </script>
 
