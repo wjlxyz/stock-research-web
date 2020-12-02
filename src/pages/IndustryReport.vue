@@ -1,10 +1,12 @@
 <template>
-  <div>IndustryReport</div>
+  <Report></Report>
 </template>
 
 <script>
+import Report from "../components/Report";
 export default {
-name: "IndustryReport"
+name: "IndustryReport",
+  components: {Report}
 }
 </script>
 
