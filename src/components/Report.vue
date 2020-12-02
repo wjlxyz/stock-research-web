@@ -40,7 +40,7 @@
         </div>
 
         <div>
-            <data-tables :data="tableData" :filters="filters">
+            <data-tables :data="tableData" :filters="filters" :key="tableKey">
                 <el-table-column
                         v-for="title in titles"
                         :prop="title.prop"
@@ -58,8 +58,29 @@
     export default {
         name: "Report",
         created() {
-            this.loadData()
-            console.log('created:' + this.tableData)
+            let that = this
+            const url = 'http://reportapi.eastmoney.com/report/jg?'
+                + '&pageSize=5'
+                + '&beginTime='
+                + '&endTime='
+                + '&pageNo=1'
+                + '&fields='
+                + '&qType=3'
+                + '&orgCode=80055521'
+                + '&_=1605007898254'
+            axios.get(url).then(response => {
+                let responseData = response.data.data
+                for (let i = 0; i < responseData.length; i++) {
+                    that.tableData[i] = {
+                        'report_title': responseData[i]['title'],
+                        'broker_name': responseData[i]['orgSName'],
+                        'publish_date': responseData[i]['publishDate'],
+                        'rate': '-'
+                    }
+                }
+                that.tableKey++
+            })
+
         },
         data() {
             return {
@@ -115,7 +136,8 @@
                         value: ''
                     }
                 ],
-                tableData: []
+                tableData: [],
+                tableKey: 0
             }
         },
         methods: {
