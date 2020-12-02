@@ -4,7 +4,7 @@
 
 <script>
 export default {
-name: "StockReport"
+  name: "StockReport"
 }
 </script>
 

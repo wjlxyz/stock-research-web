@@ -59,6 +59,7 @@
         name: "Report",
         created() {
             this.loadData()
+            console.log('created:' + this.tableData)
         },
         data() {
             return {
@@ -118,8 +119,8 @@
             }
         },
         methods: {
-            loadData() {
-                let that = this
+            loadData: function () {
+                const self = this
                 const url = 'http://reportapi.eastmoney.com/report/jg?'
                     + '&pageSize=5'
                     + '&beginTime='
@@ -129,18 +130,17 @@
                     + '&qType=3'
                     + '&orgCode=80055521'
                     + '&_=1605007898254'
-                axios.get(url).then(response => {
-                    const responseData = response.data.data
-                    for (let i = 0; i < responseData.length; i++) {
-                        that.tableData[i] = {
-                            'report_title': responseData[i]['title'],
-                            'broker_name': responseData[i]['orgSName'],
-                            'publish_date': responseData[i]['publishDate'],
-                            'rate': ''
-                        }
+                axios.get(url).then(this.fillTableData, self)
+            },
+            fillTableData: function (data, self) {
+                for (let i = 0; i < data.length; i++) {
+                    self.tableData[i] = {
+                      'report_title': data[i]['title'],
+                      'broker_name': data[i]['orgSName'],
+                      'publish_date': data[i]['publishDate'],
+                      'rate': '-'
                     }
-                    console.log(that.tableData)
-                })
+                }
             }
         }
     }
