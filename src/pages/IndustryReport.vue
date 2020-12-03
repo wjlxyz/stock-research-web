@@ -80,7 +80,9 @@
         }
         that.tableKey++
       })
-      this.common.getAllBkCode()
+      this.common.getAllConceptBkCode()
+      this.common.getAllIndustryBkCode()
+      this.common.getAllRegionBkCode()
     },
     data() {
       return {
