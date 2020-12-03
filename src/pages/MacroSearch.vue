@@ -142,28 +142,20 @@
             }
         },
         methods: {
-            loadData: function () {
+            getMacroSearch: function () {
+                const beginTime = this.dateRangeValue[0]
+                const endTime = this.dateRangeValue[1]
                 const self = this
                 const url = 'http://reportapi.eastmoney.com/report/jg?'
                     + '&pageSize=5'
-                    + '&beginTime='
-                    + '&endTime='
+                    + '&beginTime=' + beginTime
+                    + '&endTime=' + endTime
                     + '&pageNo=1'
                     + '&fields='
                     + '&qType=3'
                     + '&orgCode=80055521'
                     + '&_=1605007898254'
                 axios.get(url).then(this.fillTableData, self)
-            },
-            fillTableData: function (data, self) {
-                for (let i = 0; i < data.length; i++) {
-                    self.tableData[i] = {
-                        'report_title': data[i]['title'],
-                        'broker_name': data[i]['orgSName'],
-                        'publish_date': data[i]['publishDate'],
-                        'rate': '-'
-                    }
-                }
             }
         }
     }

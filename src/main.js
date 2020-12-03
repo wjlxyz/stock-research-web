@@ -7,12 +7,14 @@ import locale from "element-ui/lib/locale";
 import VueDataTables from 'vue-data-tables'
 import axios from 'axios'
 import router from "./router";
+import common from "./common.js";
 
 Vue.config.productionTip = false
 Vue.use(ElementUI)
 locale.use(lang)
 Vue.use(VueDataTables)
 Vue.prototype.$ajax=axios
+Vue.prototype.common = common
 
 new Vue({
   el: '#app',
