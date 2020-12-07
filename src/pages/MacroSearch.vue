@@ -77,7 +77,6 @@
                         'publish_date': responseData[i]['publishDate'],
                         'rate': '-'
                     }
-                    console.log(responseData[i])
                 }
                 that.tableKey++
             })

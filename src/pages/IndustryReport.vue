@@ -2,7 +2,7 @@
   <div>
     <div style="border: 1px solid #eee; padding: 10px">
       <div>
-        <el-select v-model="brokerName" placeholder="请选择券商">
+        <el-select v-model="brokerCode" placeholder="请选择券商">
           <el-option
                   v-for="item in brokers"
                   :key="item.value"
@@ -58,38 +58,19 @@
   export default {
     name: "IndustryReport",
     created() {
-      let that = this
-      const url = 'http://reportapi.eastmoney.com/report/jg?'
-              + '&pageSize=5'
-              + '&beginTime='
-              + '&endTime='
-              + '&pageNo=1'
-              + '&fields='
-              + '&qType=3'
-              + '&orgCode=80055521'
-              + '&_=1605007898254'
-      axios.get(url).then(response => {
-        let responseData = response.data.data
-        for (let i = 0; i < responseData.length; i++) {
-          that.tableData[i] = {
-            'report_title': responseData[i]['title'],
-            'broker_name': responseData[i]['orgSName'],
-            'publish_date': responseData[i]['publishDate'],
-            'rate': '-'
-          }
-        }
-        that.tableKey++
-      })
-      this.common.getAllConceptBkCode()
-      this.common.getAllIndustryBkCode()
-      this.common.getAllRegionBkCode()
+      // this.getReport()
+      this.getIndustryReportInfo()
+      // this.common.getAllConceptBkCode()
+      // this.common.getAllIndustryBkCode()
+      // this.common.getAllRegionBkCode()
     },
     data() {
       return {
         brokers: [
-          {value: '0', label: 'all'}
+          {value: '0', label: 'all'},
+          {value: '80000206', label: '浙商证券'}
         ],
-        brokerName: '',
+        brokerCode: '',
         pickerOptions: {
           shortcuts: [
             {
@@ -144,17 +125,57 @@
     },
     methods: {
       getReport: function () {
-        const self = this
+        let that = this
         const url = 'http://reportapi.eastmoney.com/report/jg?'
-                + '&pageSize=5'
-                + '&beginTime='
-                + '&endTime='
+                + '&pageSize=10'
+                + '&beginTime=' + this.dateRangeValue[0]
+                + '&endTime=' + this.dateRangeValue[1]
                 + '&pageNo=1'
                 + '&fields='
                 + '&qType=3'
-                + '&orgCode=80055521'
-                + '&_=1605007898254'
-        axios.get(url).then(this.fillTableData, self)
+                + '&orgCode=' + this.brokerCode
+        axios.get(url).then(response => {
+          let responseData = response.data.data
+          console.log(responseData)
+          for (let i = 0; i < responseData.length; i++) {
+            that.tableData[i] = {
+              'report_title': responseData[i]['title'],
+              'broker_name': responseData[i]['orgSName'],
+              'publish_date': responseData[i]['publishDate'].substr(0, 11),
+              'rate': '-'
+            }
+          }
+          that.tableKey++
+        })
+      },
+      getIndustryReportInfo: function () {
+        let that = this
+        const url = 'http://reportapi.eastmoney.com/report/list?industryCode='
+            + '&pageSize=50'
+            + '&industry='
+            + '&rating='
+            + '&ratingChange=*'
+            + '&beginTime=' + this.dateRangeValue[0]
+            + '&endTime=' + this.dateRangeValue[1]
+            + '&pageNo=1'
+            + '&fields=&'
+            + 'qType=1'
+            + '&orgCode='
+            + '&rcode=&_=' + this.dateRangeValue[1]
+        axios.get(url).then(response => {
+          let responseData = response.data.data
+          console.log(responseData)
+          for (let i = 0; i < responseData.length; i++) {
+            const reportUrl = 'http://pdf.dfcfw.com/pdf/H3_' + responseData[i]['infoCode'] + '_1.pdf'
+            that.tableData[i] = {
+              'report_title': `<a href="${reportUrl}">${responseData[i]['title']}</a>`,
+              'broker_name': responseData[i]['orgSName'],
+              'publish_date': responseData[i]['publishDate'].substr(0, 11),
+              'rate': '-'
+            }
+          }
+          that.tableKey++
+        })
       },
       fillReportUrl: function (report_info) {
         return 'http://pdf.dfcfw.com/pdf/H3_' + report_info['infoCode'] + '_1.pdf'
