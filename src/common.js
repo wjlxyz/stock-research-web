@@ -10,12 +10,15 @@ export default {
     },
 
     getAllIndustryBkCode: async function () {
-        return this.getBkCode('016')
+        this.industryBkCode = this.getBkCode('016')
     },
     getAllRegionBkCode: async function () {
-        return this.getBkCode('020')
+        this.regionBkCode = this.getBkCode('020')
     },
     getAllConceptBkCode: async function () {
-        return this.getBkCode('007')
-    }
+        this.conceptBkCode = this.getBkCode('007')
+    },
+    industryBkCode: [],
+    regionBkCode: [],
+    conceptBkCode: []
 }
