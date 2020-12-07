@@ -41,11 +41,17 @@
 
     <div>
       <data-tables :data="tableData" :filters="filters" :key="tableKey">
+        <el-table-column prop="report_title" label="研报标题">
+          <template slot-scope="scope">
+            <a :href="scope.row.report_url" target="_blank">{{scope.row.report_title}}</a>
+          </template>
+        </el-table-column>
         <el-table-column
                 v-for="title in titles"
                 :prop="title.prop"
                 :label="title.label"
                 :key="title.prop">
+
         </el-table-column>
       </data-tables>
     </div>
@@ -168,7 +174,8 @@
           for (let i = 0; i < responseData.length; i++) {
             const reportUrl = 'http://pdf.dfcfw.com/pdf/H3_' + responseData[i]['infoCode'] + '_1.pdf'
             that.tableData[i] = {
-              'report_title': `<a href="${reportUrl}">${responseData[i]['title']}</a>`,
+              'report_title': responseData[i]['title'],
+              'report_url': reportUrl,
               'broker_name': responseData[i]['orgSName'],
               'publish_date': responseData[i]['publishDate'].substr(0, 11),
               'rate': '-'
