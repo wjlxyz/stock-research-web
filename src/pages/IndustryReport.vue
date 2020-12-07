@@ -2,7 +2,7 @@
   <div>
     <div style="border: 1px solid #eee; padding: 10px">
       <div>
-        <el-select v-model="brokerCode" placeholder="请选择券商">
+        <el-select v-model="brokerCode" :key="brokerKey" placeholder="请选择券商">
           <el-option
                   v-for="item in brokers"
                   :key="item.value"
@@ -64,17 +64,13 @@
   export default {
     name: "IndustryReport",
     created() {
-      // this.getReport()
       this.getIndustryReportInfo()
-      // this.common.getAllConceptBkCode()
-      // this.common.getAllIndustryBkCode()
-      // this.common.getAllRegionBkCode()
+      this.fillBrokerInfo()
     },
     data() {
       return {
         brokers: [
           {value: '0', label: 'all'},
-          {value: '80000206', label: '浙商证券'}
         ],
         brokerCode: '',
         pickerOptions: {
@@ -126,34 +122,11 @@
           }
         ],
         tableData: [],
-        tableKey: 0
+        tableKey: 0,
+        brokerKey: 0
       }
     },
     methods: {
-      getReport: function () {
-        let that = this
-        const url = 'http://reportapi.eastmoney.com/report/jg?'
-                + '&pageSize=10'
-                + '&beginTime=' + this.dateRangeValue[0]
-                + '&endTime=' + this.dateRangeValue[1]
-                + '&pageNo=1'
-                + '&fields='
-                + '&qType=3'
-                + '&orgCode=' + this.brokerCode
-        axios.get(url).then(response => {
-          let responseData = response.data.data
-          console.log(responseData)
-          for (let i = 0; i < responseData.length; i++) {
-            that.tableData[i] = {
-              'report_title': responseData[i]['title'],
-              'broker_name': responseData[i]['orgSName'],
-              'publish_date': responseData[i]['publishDate'].substr(0, 11),
-              'rate': '-'
-            }
-          }
-          that.tableKey++
-        })
-      },
       getIndustryReportInfo: function () {
         let that = this
         const url = 'http://reportapi.eastmoney.com/report/list?industryCode='
@@ -184,8 +157,20 @@
           that.tableKey++
         })
       },
-      fillReportUrl: function (report_info) {
-        return 'http://pdf.dfcfw.com/pdf/H3_' + report_info['infoCode'] + '_1.pdf'
+      fillBrokerInfo: function () {
+        this.brokers[0] = {
+          'label': 'all',
+          'value': 0
+        }
+        console.log(this.common.brokerInfo)
+        for (let i = 0; i < this.common.brokerInfo.length; i++) {
+          this.brokers[i - 1] = {
+            'label': this.common.brokerInfo[i]['orgSName'],
+            'value': this.common.brokerInfo[i]['orgCode']
+          }
+        }
+        console.log(this.brokers)
+        this.brokerKey++
       }
     }
   }

@@ -31,6 +31,9 @@
           <el-submenu index="5">
             <template slot="title"><router-link :to="{name: 'BrokerMorningBriefing'}"><i class="el-icon-menu"></i>券商晨会</router-link></template>
           </el-submenu>
+          <el-submenu index="6">
+            <template slot="title"><router-link :to="{name: 'BrokerMorningBriefing'}"><i class="el-icon-menu"></i>龙虎榜</router-link></template>
+          </el-submenu>
         </el-menu>
       </el-aside>
       <el-container>
@@ -46,6 +49,10 @@
 
 export default {
   name: 'App',
+  created() {
+    this.common.getAllBrokerInfo()
+    this.common.getAllIndustryBkCode()
+  },
   data() {
     return {
       showIndex: 1
