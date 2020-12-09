@@ -107,7 +107,6 @@
         },
         dateRangeValue: [new Date().getTime() - 1000 * 3600 * 24 * 7, new Date().getTime()],
         titles: [
-          {prop: 'report_title', label: '研报标题'},
           {prop: 'broker_name', label: '券商'},
           {prop: 'publish_date', label: '发布时间'},
           {prop: 'rate', label: '买卖评级'},
