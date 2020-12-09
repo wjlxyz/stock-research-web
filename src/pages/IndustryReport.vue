@@ -2,18 +2,19 @@
   <div>
     <div style="border: 1px solid #eee; padding: 10px">
       <div>
-        <el-select v-model="brokerCode" :key="brokerKey" placeholder="请选择券商">
+        <el-select v-model="brokerCode" placeholder="请选择券商" @change="getIndustryReportInfo">
           <el-option
                   v-for="item in brokers"
-                  :key="item.value"
-                  :label="item.label"
-                  :value="item.value">
+                  :key="item.orgCode"
+                  :label="item.orgSName"
+                  :value="item.orgCode">
           </el-option>
         </el-select>
       </div>
       <div>
         <span class="demonstration">请选择时间范围</span>
         <el-date-picker
+                @change="getIndustryReportInfo"
                 v-model="dateRangeValue"
                 type="daterange"
                 align="right"
@@ -40,7 +41,12 @@
     </div>
 
     <div>
-      <data-tables :data="tableData" :filters="filters" :key="tableKey">
+      <data-tables :data="tableData" :filters="filters" :key="tableKey" :loading="true" :pagination.sync="pagination">
+        <el-pagination
+                background
+                layout="prev, pager, next"
+                :total="1000">
+        </el-pagination>
         <el-table-column prop="report_title" label="研报标题">
           <template slot-scope="scope">
             <a :href="scope.row.report_url" target="_blank">{{scope.row.report_title}}</a>
@@ -51,7 +57,6 @@
                 :prop="title.prop"
                 :label="title.label"
                 :key="title.prop">
-
         </el-table-column>
       </data-tables>
     </div>
@@ -60,18 +65,16 @@
 
 <script>
   import axios from "axios";
+  import data from "../data"
 
   export default {
     name: "IndustryReport",
     created() {
       this.getIndustryReportInfo()
-      this.fillBrokerInfo()
     },
     data() {
       return {
-        brokers: [
-          {value: '0', label: 'all'},
-        ],
+        brokers: data.brokerList,
         brokerCode: '',
         pickerOptions: {
           shortcuts: [
@@ -122,30 +125,41 @@
         ],
         tableData: [],
         tableKey: 0,
-        brokerKey: 0
+        pagination: {},
+        currentPage: 1,
+        pageSize: 40,
+        totalHits: 0,
+      }
+    },
+    watch: {
+      pagination: {
+        deep: true,
+        handler() {
+          console.log(this.pagination)
+        }
       }
     },
     methods: {
       getIndustryReportInfo: function () {
-        let that = this
         const url = 'http://reportapi.eastmoney.com/report/list?industryCode='
-            + '&pageSize=50'
+            + '&pageSize=' + this.pageSize
             + '&industry='
             + '&rating='
             + '&ratingChange=*'
             + '&beginTime=' + this.dateRangeValue[0]
             + '&endTime=' + this.dateRangeValue[1]
-            + '&pageNo=1'
+            + '&pageNo=' + this.currentPage
             + '&fields=&'
             + 'qType=1'
-            + '&orgCode='
+            + '&orgCode=' + (this.brokerCode === 0 ? '' : this.brokerCode)
             + '&rcode=&_=' + this.dateRangeValue[1]
         axios.get(url).then(response => {
           let responseData = response.data.data
-          console.log(responseData)
+          console.log(response)
+          this.totalHits = response.data['hits']
           for (let i = 0; i < responseData.length; i++) {
             const reportUrl = 'http://pdf.dfcfw.com/pdf/H3_' + responseData[i]['infoCode'] + '_1.pdf'
-            that.tableData[i] = {
+            this.tableData[i] = {
               'report_title': responseData[i]['title'],
               'report_url': reportUrl,
               'broker_name': responseData[i]['orgSName'],
@@ -153,23 +167,9 @@
               'rate': '-'
             }
           }
-          that.tableKey++
+          this.tableKey++
+          console.log(this.totalHits)
         })
-      },
-      fillBrokerInfo: function () {
-        this.brokers[0] = {
-          'label': 'all',
-          'value': 0
-        }
-        console.log(this.common.brokerInfo)
-        for (let i = 0; i < this.common.brokerInfo.length; i++) {
-          this.brokers[i - 1] = {
-            'label': this.common.brokerInfo[i]['orgSName'],
-            'value': this.common.brokerInfo[i]['orgCode']
-          }
-        }
-        console.log(this.brokers)
-        this.brokerKey++
       }
     }
   }

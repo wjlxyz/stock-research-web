@@ -50,7 +50,7 @@
 export default {
   name: 'App',
   created() {
-    this.common.getAllBrokerInfo()
+    // this.common.getAllBrokerInfo()
     this.common.getAllIndustryBkCode()
   },
   data() {

@@ -1,5 +1,4 @@
 import axios from "axios";
-import IndustryReport from "./pages/IndustryReport";
 
 export default {
     getBkCode: async function(bkInfo) {
@@ -24,7 +23,6 @@ export default {
         let url = 'http://reportapi.eastmoney.com/report/org'
         let resp = await axios.get(url)
         this.brokerInfo = resp.data.data
-        IndustryReport.data().brokerKey++
     },
     industryBkCode: [],
     regionBkCode: [],
