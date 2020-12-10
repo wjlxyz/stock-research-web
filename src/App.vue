@@ -49,11 +49,11 @@
 
 export default {
   name: 'App',
-  // created() {
-  //   // this.common.getAllBrokerInfo()
-  //   // this.common.getAllRegionBkCode()
-  //   // this.common.getAllConceptBkCode()
-  // },
+  created() {
+    // this.common.getAllBrokerInfo()
+    this.common.getSHStockInfoList()
+    this.common.getSZStockInfoList()
+  },
   // data() {
   //   return {
   //     showIndex: 1
@@ -83,5 +83,9 @@ html, body {
   color: #333;
   text-align: center;
   line-height: 60px;
+}
+.el-main {
+  overflow: hidden;
+  height: fit-content;
 }
 </style>
