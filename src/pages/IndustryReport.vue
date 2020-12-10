@@ -173,6 +173,12 @@
       }
     }
   }
+
+  // 宝钢股份最新研究报告
+  // https://reportapi.eastmoney.com/report/list?cb=datatable1748368&code=600019&industryCode=*&pageSize=5&industry=*&rating=*&ratingchange=*&beginTime=2018-12-10&endTime=2020-12-10&pageNo=1&fields=&qType=0&_=1607576243344
+
+  // 钢铁行业最新研究报告
+  // https://reportapi.eastmoney.com/report/list?cb=datatable6224897&industryCode=479&pageSize=5&industry=*&rating=*&ratingchange=*&beginTime=&endTime=&pageNo=1&fields=&qType=1&_=1607576243342
 </script>
 
 <style scoped>

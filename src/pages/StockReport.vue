@@ -129,6 +129,7 @@
         currentPage: 1,
         pageSize: 40,
         totalHits: 0,
+        industry: "",
       }
     },
     watch: {
@@ -143,7 +144,7 @@
       getIndustryReportInfo: function () {
         const url = 'http://reportapi.eastmoney.com/report/list?industryCode='
                 + '&pageSize=' + this.pageSize
-                + '&industry='
+                + '&industry=' + this.industry
                 + '&rating='
                 + '&ratingChange=*'
                 + '&beginTime=' + this.dateRangeValue[0]
