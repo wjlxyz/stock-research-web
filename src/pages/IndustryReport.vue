@@ -2,7 +2,7 @@
   <div>
     <div style="border: 1px solid #eee; padding: 10px">
       <div>
-        <el-select v-model="brokerCode" placeholder="请选择券商" @change="getIndustryReportInfo">
+        <el-select v-model="brokerCode" placeholder="请选择券商" @change="getIndustryReportList">
           <el-option
                   v-for="item in brokers"
                   :key="item.orgCode"
@@ -14,7 +14,7 @@
       <div>
         <span class="demonstration">请选择时间范围</span>
         <el-date-picker
-                @change="getIndustryReportInfo"
+                @change="getIndustryReportList"
                 v-model="dateRangeValue"
                 type="daterange"
                 align="right"
@@ -70,7 +70,7 @@
   export default {
     name: "IndustryReport",
     created() {
-      this.getIndustryReportInfo()
+      this.getIndustryReportList()
     },
     data() {
       return {
@@ -140,7 +140,7 @@
       }
     },
     methods: {
-      getIndustryReportInfo: function () {
+      getIndustryReportList: function () {
         const url = 'http://reportapi.eastmoney.com/report/list?industryCode='
             + '&pageSize=' + this.pageSize
             + '&industry='
@@ -175,7 +175,7 @@
   }
 
   // 宝钢股份最新研究报告
-  // https://reportapi.eastmoney.com/report/list?cb=datatable1748368&code=600019&industryCode=*&pageSize=5&industry=*&rating=*&ratingchange=*&beginTime=2018-12-10&endTime=2020-12-10&pageNo=1&fields=&qType=0&_=1607576243344
+  // https://reportapi.eastmoney.com/report/list?cb=datatable1748368&code=688289&industryCode=*&pageSize=5&industry=*&rating=*&ratingchange=*&beginTime=2018-12-10&endTime=2020-12-10&pageNo=1&fields=&qType=0&_=1607576243344
 
   // 钢铁行业最新研究报告
   // https://reportapi.eastmoney.com/report/list?cb=datatable6224897&industryCode=479&pageSize=5&industry=*&rating=*&ratingchange=*&beginTime=&endTime=&pageNo=1&fields=&qType=1&_=1607576243342

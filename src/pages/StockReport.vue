@@ -2,7 +2,7 @@
   <div>
     <div style="border: 1px solid #eee; padding: 10px">
       <div>
-        <el-select v-model="brokerCode" placeholder="请选择券商" @change="getIndustryReportInfo">
+        <el-select v-model="brokerCode" placeholder="请选择券商" @change="getSingleStockReportInfo">
           <el-option
                   v-for="item in brokers"
                   :key="item.orgCode"
@@ -10,11 +10,13 @@
                   :value="item.orgCode">
           </el-option>
         </el-select>
+        <el-input placeholder="请输入个股名称" v-model="stockName" clearable></el-input>
+        <el-button type="primary" @click="getSingleStockReportInfo">查询</el-button>
       </div>
       <div>
         <span class="demonstration">请选择时间范围</span>
         <el-date-picker
-                @change="getIndustryReportInfo"
+                @change="getSingleStockReportInfo"
                 v-model="dateRangeValue"
                 type="daterange"
                 align="right"
@@ -70,7 +72,7 @@
   export default {
     name: "StockReport",
     created() {
-      this.getIndustryReportInfo()
+      this.getSingleStockReportInfo()
     },
     data() {
       return {
@@ -110,9 +112,11 @@
         },
         dateRangeValue: [new Date().getTime() - 1000 * 3600 * 24 * 7, new Date().getTime()],
         titles: [
+          {prop: 'stock_name', label: '个股名称'},
           {prop: 'broker_name', label: '券商'},
-          {prop: 'publish_date', label: '发布时间'},
           {prop: 'rate', label: '买卖评级'},
+          {prop: 'bk', label: '所属板块'},
+          {prop: 'publish_date', label: '发布时间'},
         ],
         filters: [
           {
@@ -130,6 +134,7 @@
         pageSize: 40,
         totalHits: 0,
         industry: "",
+        stockName: ''
       }
     },
     watch: {
@@ -141,8 +146,10 @@
       }
     },
     methods: {
-      getIndustryReportInfo: function () {
-        const url = 'http://reportapi.eastmoney.com/report/list?industryCode='
+      getSingleStockReportInfo: function () {
+        const url = 'http://reportapi.eastmoney.com/report/list?'
+                + (this.stockName.length === 0 ? '' : '&code=' + this.stockName)
+                + '&industryCode=*'
                 + '&pageSize=' + this.pageSize
                 + '&industry=' + this.industry
                 + '&rating='
@@ -150,26 +157,26 @@
                 + '&beginTime=' + this.dateRangeValue[0]
                 + '&endTime=' + this.dateRangeValue[1]
                 + '&pageNo=' + this.currentPage
-                + '&fields=&'
-                + 'qType=0'
-                + '&orgCode=' + (this.brokerCode === 0 ? '' : this.brokerCode)
+                + '&fields='
+                + '&qType=0'
+                + '&orgCode=' + (this.brokerCode === 0 ? '*' : this.brokerCode)
                 + '&rcode=&_=' + this.dateRangeValue[1]
         axios.get(url).then(response => {
           let responseData = response.data.data
-          console.log(response)
           this.totalHits = response.data['hits']
           for (let i = 0; i < responseData.length; i++) {
             const reportUrl = 'http://pdf.dfcfw.com/pdf/H3_' + responseData[i]['infoCode'] + '_1.pdf'
             this.tableData[i] = {
+              'stock_name': responseData[i]['stockName'],
               'report_title': responseData[i]['title'],
               'report_url': reportUrl,
               'broker_name': responseData[i]['orgSName'],
               'publish_date': responseData[i]['publishDate'].substr(0, 11),
-              'rate': '-'
+              'rate': responseData[i]['emRatingName'],
+              'bk': responseData[i]['indvInduName']
             }
           }
           this.tableKey++
-          console.log(this.totalHits)
         })
       }
     }
