@@ -161,6 +161,7 @@
                 + '&qType=0'
                 + '&orgCode=' + (this.brokerCode === 0 ? '*' : this.brokerCode)
                 + '&rcode=&_=' + this.dateRangeValue[1]
+        console.log(url)
         axios.get(url).then(response => {
           let responseData = response.data.data
           this.totalHits = response.data['hits']
