@@ -77,7 +77,7 @@
     data() {
       return {
         brokers: data.brokerList,
-        brokerCode: '',
+        brokerCode: '0',
         pickerOptions: {
           shortcuts: [
             {
@@ -159,7 +159,7 @@
                 + '&pageNo=' + this.currentPage
                 + '&fields='
                 + '&qType=0'
-                + '&orgCode=' + (this.brokerCode === 0 ? '*' : this.brokerCode)
+                + '&orgCode=' + (this.brokerCode === '0' ? '*' : this.brokerCode)
                 + '&rcode=&_=' + this.dateRangeValue[1]
         console.log(url)
         axios.get(url).then(response => {

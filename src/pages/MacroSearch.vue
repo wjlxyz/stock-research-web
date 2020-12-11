@@ -2,12 +2,12 @@
     <div>
         <div style="border: 1px solid #eee; padding: 10px">
             <div>
-                <el-select v-model="brokerName" placeholder="请选择券商">
+                <el-select v-model="brokerCode" placeholder="请选择券商" @change="getMacroSearch">
                     <el-option
                             v-for="item in brokers"
-                            :key="item.value"
-                            :label="item.label"
-                            :value="item.value">
+                            :key="item.orgCode"
+                            :label="item.orgSName"
+                            :value="item.orgCode">
                     </el-option>
                 </el-select>
             </div>
@@ -41,6 +41,11 @@
 
         <div>
             <data-tables :data="tableData" :filters="filters" :key="tableKey">
+                <el-table-column prop="report_title" label="研报标题">
+                    <template slot-scope="scope">
+                        <a :href="scope.row.report_url" target="_blank">{{scope.row.report_title}}</a>
+                    </template>
+                </el-table-column>
                 <el-table-column
                         v-for="title in titles"
                         :prop="title.prop"
@@ -54,40 +59,17 @@
 
 <script>
     import axios from "axios";
+    import data from "../data";
 
     export default {
         name: "MacroSearch",
         created() {
-            let that = this
-            const url = 'http://reportapi.eastmoney.com/report/jg?'
-                + '&pageSize=5'
-                + '&beginTime='
-                + '&endTime='
-                + '&pageNo=1'
-                + '&fields='
-                + '&qType=3'
-                + '&orgCode=80055521'
-                + '&_=1605007898254'
-            axios.get(url).then(response => {
-                let responseData = response.data.data
-                for (let i = 0; i < responseData.length; i++) {
-                    that.tableData[i] = {
-                        'report_title': responseData[i]['title'],
-                        'broker_name': responseData[i]['orgSName'],
-                        'publish_date': responseData[i]['publishDate'],
-                        'rate': '-'
-                    }
-                }
-                that.tableKey++
-            })
-
+            this.getMacroSearch()
         },
         data() {
             return {
-                brokers: [
-                    {value: '0', label: 'all'}
-                ],
-                brokerName: '',
+                brokers: data.brokerList,
+                brokerCode: '0',
                 pickerOptions: {
                     shortcuts: [
                         {
@@ -122,7 +104,6 @@
                 },
                 dateRangeValue: [new Date().getTime() - 1000 * 3600 * 24 * 7, new Date().getTime()],
                 titles: [
-                    {prop: 'report_title', label: '研报标题'},
                     {prop: 'broker_name', label: '券商'},
                     {prop: 'publish_date', label: '发布时间'},
                     {prop: 'rate', label: '买卖评级'},
@@ -142,19 +123,30 @@
         },
         methods: {
             getMacroSearch: function () {
-                const beginTime = this.dateRangeValue[0]
-                const endTime = this.dateRangeValue[1]
-                const self = this
+                let that = this
                 const url = 'http://reportapi.eastmoney.com/report/jg?'
                     + '&pageSize=5'
-                    + '&beginTime=' + beginTime
-                    + '&endTime=' + endTime
+                    + '&beginTime='
+                    + '&endTime='
                     + '&pageNo=1'
                     + '&fields='
                     + '&qType=3'
-                    + '&orgCode=80055521'
+                    + '&orgCode=' + (this.brokerCode === '0' ? '' : this.brokerCode)
                     + '&_=1605007898254'
-                axios.get(url).then(this.fillTableData, self)
+                axios.get(url).then(response => {
+                    let responseData = response.data.data
+                    for (let i = 0; i < responseData.length; i++) {
+                        const reportUrl = 'http://pdf.dfcfw.com/pdf/H3_' + responseData[i]['infoCode'] + '_1.pdf'
+                        that.tableData[i] = {
+                            'report_title': responseData[i]['title'],
+                            'report_url': reportUrl,
+                            'broker_name': responseData[i]['orgSName'],
+                            'publish_date': responseData[i]['publishDate'],
+                            'rate': '-'
+                        }
+                    }
+                    that.tableKey++
+                })
             }
         }
     }
