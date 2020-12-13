@@ -105,8 +105,7 @@
                 dateRangeValue: [new Date().getTime() - 1000 * 3600 * 24 * 7, new Date().getTime()],
                 titles: [
                     {prop: 'broker_name', label: '券商'},
-                    {prop: 'publish_date', label: '发布时间'},
-                    {prop: 'rate', label: '买卖评级'},
+                    {prop: 'publish_date', label: '发布时间'}
                 ],
                 filters: [
                     {
@@ -134,6 +133,7 @@
                     + '&orgCode=' + (this.brokerCode === '0' ? '' : this.brokerCode)
                     + '&_=1605007898254'
                 axios.get(url).then(response => {
+                    console.log(response)
                     let responseData = response.data.data
                     for (let i = 0; i < responseData.length; i++) {
                         const reportUrl = 'http://pdf.dfcfw.com/pdf/H3_' + responseData[i]['infoCode'] + '_1.pdf'
@@ -141,8 +141,7 @@
                             'report_title': responseData[i]['title'],
                             'report_url': reportUrl,
                             'broker_name': responseData[i]['orgSName'],
-                            'publish_date': responseData[i]['publishDate'],
-                            'rate': '-'
+                            'publish_date': responseData[i]['publishDate']
                         }
                     }
                     that.tableKey++
