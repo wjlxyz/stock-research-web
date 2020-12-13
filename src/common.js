@@ -36,8 +36,6 @@ export default {
         resp.data.data.diff.forEach((stock, index) => {
             this.szStockInfoList[index] = {'code': stock['f12'], 'name': stock['f14']}
         })
-        this.szStockInfoList = resp.data.data.diff
-        // console.log(this.szStockInfoList)
     },
     getSHStockInfoList: async function() {
         let url = 'http://91.push2.eastmoney.com/api/qt/clist/get?'
@@ -51,8 +49,6 @@ export default {
         resp.data.data.diff.forEach((stock, index) => {
             this.shStockInfoList[index] = {'code': stock['f12'], 'name': stock['f14']}
         })
-        this.shStockInfoList = resp.data.data.diff
-        // console.log(this.shStockInfoList)
     },
     industryBkCode: [],
     regionBkCode: [],

@@ -1,16 +1,8 @@
 <template>
   <div id="app">
     <el-header>
-      <el-header style="text-align: right; font-size: 12px">
-        <el-dropdown>
-          <i class="el-icon-setting" style="margin-right: 15px"></i>
-          <el-dropdown-menu slot="dropdown">
-            <el-dropdown-item>查看</el-dropdown-item>
-            <el-dropdown-item>新增</el-dropdown-item>
-            <el-dropdown-item>删除</el-dropdown-item>
-          </el-dropdown-menu>
-        </el-dropdown>
-        <span>王小虎</span>
+      <el-header style="text-align: left; font-size: 24px">
+        <router-link :to="{name: 'HomePage'}">主页</router-link>
       </el-header>
     </el-header>
     <el-container style="height: 100%; border: 1px solid #eee">
@@ -51,8 +43,8 @@ export default {
   name: 'App',
   created() {
     // this.common.getAllBrokerInfo()
-    this.common.getSHStockInfoList()
-    this.common.getSZStockInfoList()
+    // this.common.getSHStockInfoList()
+    // this.common.getSZStockInfoList()
   },
   // data() {
   //   return {
