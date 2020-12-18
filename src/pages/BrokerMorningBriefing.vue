@@ -42,11 +42,11 @@
 
     <div>
       <data-tables :data="tableData" :filters="filters" :key="tableKey" :loading="true" :pagination.sync="pagination">
-        <el-pagination
-                background
-                layout="prev, pager, next"
-                :total="1000">
-        </el-pagination>
+<!--        <el-pagination-->
+<!--                background-->
+<!--                layout="prev, pager, next"-->
+<!--                :total="1000">-->
+<!--        </el-pagination>-->
         <el-table-column prop="report_title" label="研报标题">
           <template slot-scope="scope">
             <a :href="scope.row.report_url" target="_blank">{{scope.row.report_title}}</a>

@@ -18,6 +18,7 @@
                         type="daterange"
                         align="right"
                         unlink-panels
+                        stripe
                         range-separator="至"
                         start-placeholder="开始日期"
                         end-placeholder="结束日期"
@@ -40,7 +41,29 @@
         </div>
 
         <div>
-            <data-tables :data="tableData" :filters="filters" :key="tableKey">
+            <el-pagination style="border: #eee 1px solid; margin-top: 4px"
+                    background
+                    layout="total, prev, pager, next, sizes"
+                    :total="totalHits"
+                    :page-size="pageSize"
+                    :current-page="currentPage"
+                    :page-sizes="[10, 20, 50, 100, 200, 500, 1000]"
+                    @current-change="handleCurrentChange"
+                    @size-change="handleSizeChange"
+            ></el-pagination>
+        </div>
+        <div>
+            <data-tables
+                    :data="tableData"
+                    border
+                    :filters="filters"
+                    :key="tableKey"
+            >
+                <el-table-column prop="id" label="编号" width="64px">
+                    <template slot-scope="scope">
+                        <span>{{scope.row.id}}</span>
+                    </template>
+                </el-table-column>
                 <el-table-column prop="report_title" label="研报标题">
                     <template slot-scope="scope">
                         <a :href="scope.row.report_url" target="_blank">{{scope.row.report_title}}</a>
@@ -117,40 +140,59 @@
                     }
                 ],
                 tableData: [],
-                tableKey: 0
+                tableKey: 0,
+                totalHits: 0,
+                pageSize: 10,
+                currentPage: 1
             }
         },
         methods: {
             getMacroSearch: function () {
                 let that = this
                 const url = 'http://reportapi.eastmoney.com/report/jg?'
-                    + '&pageSize=5'
-                    + '&beginTime='
-                    + '&endTime='
-                    + '&pageNo=1'
+                    + '&pageSize=' + this.pageSize
+                    + '&beginTime=' + this.dateRangeValue[0]
+                    + '&endTime=' + this.dateRangeValue[1]
+                    + '&pageNo=' + this.currentPage
                     + '&fields='
                     + '&qType=3'
                     + '&orgCode=' + (this.brokerCode === '0' ? '' : this.brokerCode)
-                    + '&_=1605007898254'
+                    + '&_=' + this.dateRangeValue[1]
                 axios.get(url).then(response => {
                     console.log(response)
+                    this.totalHits = response.data['hits']
                     let responseData = response.data.data
+                    console.log(this.totalHits)
                     for (let i = 0; i < responseData.length; i++) {
                         const reportUrl = 'http://pdf.dfcfw.com/pdf/H3_' + responseData[i]['infoCode'] + '_1.pdf'
                         that.tableData[i] = {
+                            'id': i + 1,
                             'report_title': responseData[i]['title'],
                             'report_url': reportUrl,
                             'broker_name': responseData[i]['orgSName'],
-                            'publish_date': responseData[i]['publishDate']
+                            'publish_date': responseData[i]['publishDate'].substr(0, 11),
                         }
                     }
                     that.tableKey++
                 })
+            },
+            handleCurrentChange: function (current) {
+                console.log('currentChange' + current)
+                this.currentPage = current
+                this.getMacroSearch()
+            },
+            handleSizeChange: function (val) {
+                console.log('sizeChange=' + val)
+                this.pageSize = val
+                this.getMacroSearch()
             }
         }
     }
 </script>
 
 <style scoped>
+.pagination-wrap {
+    display: none;
+}
 
 </style>

@@ -141,7 +141,7 @@
               'report_title': responseData[i]['title'],
               'report_url': reportUrl,
               'broker_name': responseData[i]['orgSName'],
-              'publish_date': responseData[i]['publishDate'],
+              'publish_date': responseData[i]['publishDate'].substr(0, 11),
               'rate': '-'
             }
           }
