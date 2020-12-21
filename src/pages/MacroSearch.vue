@@ -2,7 +2,7 @@
     <div>
         <div style="border: 1px solid #eee; padding: 10px">
             <div>
-                <el-select v-model="brokerCode" placeholder="请选择券商" @change="getMacroSearch">
+                <el-select v-model="brokerCode" filterable placeholder="请选择券商" @change="getMacroSearch">
                     <el-option
                             v-for="item in brokers"
                             :key="item.orgCode"
@@ -41,18 +41,18 @@
         </div>
 
         <div>
-            <el-pagination style="border: #eee 1px solid; margin-top: 4px"
-                    background
-                    layout="total, prev, pager, next, sizes"
-                    :total="totalHits"
-                    :page-size="pageSize"
-                    :current-page="currentPage"
-                    :page-sizes="[10, 20, 50, 100, 200, 500, 1000]"
-                    @current-change="handleCurrentChange"
-                    @size-change="handleSizeChange"
-            ></el-pagination>
         </div>
         <div>
+            <el-pagination style="border: #eee 1px solid; margin-top: 4px"
+                           background
+                           layout="total, prev, pager, next, sizes"
+                           :total="totalHits"
+                           :page-size="pageSize"
+                           :current-page="currentPage"
+                           :page-sizes="[5, 10, 20, 50, 100]"
+                           @current-change="handleCurrentChange"
+                           @size-change="handleSizeChange"
+            ></el-pagination>
             <data-tables
                     :data="tableData"
                     border
@@ -142,7 +142,7 @@
                 tableData: [],
                 tableKey: 0,
                 totalHits: 0,
-                pageSize: 10,
+                pageSize: 5,
                 currentPage: 1
             }
         },
@@ -182,8 +182,9 @@
                 this.getMacroSearch()
             },
             handleSizeChange: function (val) {
-                console.log('sizeChange=' + val)
                 this.pageSize = val
+                this.currentPage = 1
+                console.log('pageSize:' + this.pageSize + 'currentPage:' + this.currentPage)
                 this.getMacroSearch()
             }
         }

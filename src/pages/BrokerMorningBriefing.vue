@@ -2,7 +2,7 @@
   <div>
     <div style="border: 1px solid #eee; padding: 10px">
       <div>
-        <el-select v-model="brokerCode" placeholder="请选择券商" @change="getSingleStockReportInfo">
+        <el-select v-model="brokerCode" filterable placeholder="请选择券商" @change="getSingleStockReportInfo">
           <el-option
                   v-for="item in brokers"
                   :key="item.orgCode"
