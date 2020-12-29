@@ -5,13 +5,11 @@ export default {
         let today = new Date().getTime()
         let url = 'http://reportapi.eastmoney.com/report/bk?bkCode=' + bkInfo + '&_=' + today
         let resp = await axios.get(url)
-        console.log(resp.data.data)
         return resp.data.data
     },
 
     getAllIndustryBkCode: async function () {
         this.industryBkCode = this.getBkCode('016')
-        console.log(this.industryBkCode)
     },
     getAllRegionBkCode: async function () {
         this.regionBkCode = this.getBkCode('020')

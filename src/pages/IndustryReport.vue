@@ -11,21 +11,6 @@
           </el-option>
         </el-select>
       </div>
-      <div>
-        <span class="demonstration">请选择时间范围</span>
-        <el-date-picker
-                @change="getIndustryReportList"
-                v-model="dateRangeValue"
-                type="daterange"
-                align="right"
-                unlink-panels
-                range-separator="至"
-                start-placeholder="开始日期"
-                end-placeholder="结束日期"
-                format="yyyy 年 MM 月 dd 日"
-                :picker-options="pickerOptions">
-        </el-date-picker>
-      </div>
       <div style="margin-bottom: 10px">
         <el-row>
           <el-col :span="6">
@@ -41,13 +26,23 @@
     </div>
 
     <div>
-      <data-tables :data="tableData" :filters="filters" :key="tableKey" :loading="true" :pagination.sync="pagination">
-        <el-pagination
-                background
-                layout="prev, pager, next"
-                :total="1000">
-        </el-pagination>
-        <el-table-column prop="report_title" label="研报标题">
+      <el-pagination style="border: #eee 1px solid; margin-top: 4px"
+                     background
+                     layout="total, prev, pager, next, sizes"
+                     :total="totalHits"
+                     :page-size="pageSize"
+                     :current-page="currentPage"
+                     :page-sizes="[5, 10, 20, 50, 100]"
+                     @current-change="handleCurrentChange"
+                     @size-change="handleSizeChange"
+      ></el-pagination>
+      <el-table stripe :data="tableData" :filters="filters" :key="tableKey" :loading="true">
+        <el-table-column prop="id" label="编号" width="64px">
+          <template slot-scope="scope">
+            <span>{{scope.row.id}}</span>
+          </template>
+        </el-table-column>
+        <el-table-column prop="report_title" label="研报标题" width="420px">
           <template slot-scope="scope">
             <a :href="scope.row.report_url" target="_blank">{{scope.row.report_title}}</a>
           </template>
@@ -58,7 +53,7 @@
                 :label="title.label"
                 :key="title.prop">
         </el-table-column>
-      </data-tables>
+      </el-table>
     </div>
   </div>
 </template>
@@ -76,39 +71,6 @@
       return {
         brokers: data.brokerList,
         brokerCode: '0',
-        pickerOptions: {
-          shortcuts: [
-            {
-              text: '最近一周',
-              onClick(picker) {
-                const end = new Date();
-                const start = new Date();
-                start.setTime(start.getTime() - 1000 * 3600 * 24 * 7);
-                picker.$emit('pick', [start.getTime(), end.getTime()]);
-              }
-            }, {
-              text: '最近一个月',
-              onClick(picker) {
-                const end = new Date();
-                const start = new Date();
-                start.setTime(start.getTime() - 1000 * 3600 * 24 * 30);
-                picker.$emit('pick', [start.getTime(), end.getTime()]);
-              }
-            }, {
-              text: '最近三个月',
-              onClick(picker) {
-                const end = new Date();
-                const start = new Date();
-                start.setTime(start.getTime() - 1000 * 3600 * 24 * 90);
-                picker.$emit('pick', [start.getTime(), end.getTime()]);
-              }
-            }
-          ],
-          disabledDate: (time) => {
-            return time.getTime() > Date.now()
-          }
-        },
-        dateRangeValue: [new Date().getTime() - 1000 * 3600 * 24 * 7, new Date().getTime()],
         titles: [
           {prop: 'broker_name', label: '券商'},
           {prop: 'publish_date', label: '发布时间'},
@@ -125,18 +87,9 @@
         ],
         tableData: [],
         tableKey: 0,
-        pagination: {},
-        currentPage: 1,
-        pageSize: 40,
         totalHits: 0,
-      }
-    },
-    watch: {
-      pagination: {
-        deep: true,
-        handler() {
-          console.log(this.pagination)
-        }
+        pageSize: 10,
+        currentPage: 1
       }
     },
     methods: {
@@ -146,20 +99,23 @@
             + '&industry='
             + '&rating='
             + '&ratingChange=*'
-            + '&beginTime=' + this.dateRangeValue[0]
-            + '&endTime=' + this.dateRangeValue[1]
+            + '&beginTime='
+            + '&endTime='
             + '&pageNo=' + this.currentPage
             + '&fields=&'
             + 'qType=1'
             + '&orgCode=' + (this.brokerCode === '0' ? '' : this.brokerCode)
-            + '&rcode=&_=' + this.dateRangeValue[1]
+            + '&rcode=&_='
         axios.get(url).then(response => {
           let responseData = response.data.data
-          console.log(response)
           this.totalHits = response.data['hits']
+          if (responseData.length > 0) {
+            this.tableData = []
+          }
           for (let i = 0; i < responseData.length; i++) {
             const reportUrl = 'http://pdf.dfcfw.com/pdf/H3_' + responseData[i]['infoCode'] + '_1.pdf'
             this.tableData[i] = {
+              'id': i + 1,
               'report_title': responseData[i]['title'],
               'report_url': reportUrl,
               'broker_name': responseData[i]['orgSName'],
@@ -168,8 +124,16 @@
             }
           }
           this.tableKey++
-          console.log(this.totalHits)
         })
+      },
+      handleCurrentChange: function (current) {
+        this.currentPage = current
+        this.getIndustryReportList()
+      },
+      handleSizeChange: function (val) {
+        this.pageSize = val
+        this.currentPage = 1
+        this.getIndustryReportList()
       }
     }
   }
