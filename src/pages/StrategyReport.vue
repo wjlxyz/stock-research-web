@@ -12,21 +12,8 @@
                         </el-option>
                     </el-select>
                 </div>
-                <div style="margin-bottom: 10px">
-                    <el-row>
-                        <el-col :span="6">
-                            <el-input v-model="filters[0].value" placeholder="输入研报标题关键字"></el-input>
-                        </el-col>
-                    </el-row>
-                    <el-row>
-                        <el-col :span="6">
-                            <el-input v-model="filters[1].value" placeholder="输入买入评级关键字"></el-input>
-                        </el-col>
-                    </el-row>
-                </div>
             </div>
         </div>
-
         <div>
             <el-pagination style="border: #eee 1px solid; margin-top: 4px"
                            background

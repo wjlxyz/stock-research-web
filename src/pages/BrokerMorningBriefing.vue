@@ -11,18 +11,6 @@
                     </el-option>
                 </el-select>
             </div>
-            <div style="margin-bottom: 10px">
-                <el-row>
-                    <el-col :span="6">
-                        <el-input v-model="filters[0].value" placeholder="输入研报标题关键字"></el-input>
-                    </el-col>
-                </el-row>
-                <el-row>
-                    <el-col :span="6">
-                        <el-input v-model="filters[1].value" placeholder="输入买入评级关键字"></el-input>
-                    </el-col>
-                </el-row>
-            </div>
         </div>
 
         <div>
@@ -73,6 +61,7 @@
                 brokerCode: '',
                 titles: [
                     {prop: 'broker_name', label: '券商'},
+                    {prop: 'researcher', label: '研究员'},
                     {prop: 'publish_date', label: '发布时间'},
                 ],
                 filters: [
@@ -119,7 +108,8 @@
                             'broker_name': responseData[i]['orgSName'],
                             'publish_date': responseData[i]['publishDate'].substr(0, 11),
                             'rate': responseData[i]['emRatingName'],
-                            'bk': responseData[i]['indvInduName']
+                            'bk': responseData[i]['indvInduName'],
+                            'researcher': responseData[i]['researcher']
                         }
                     }
                     this.tableKey++
