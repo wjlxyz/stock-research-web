@@ -49,7 +49,6 @@
 
 <script>
     import axios from "axios";
-    import data from "../data";
 
     export default {
         name: "StrategyReport",
@@ -58,7 +57,7 @@
         },
         data() {
             return {
-                brokers: data.brokerList,
+                brokers: this.common.brokerInfo,
                 brokerCode: '0',
                 titles: [
                     {prop: 'broker_name', label: '券商'},

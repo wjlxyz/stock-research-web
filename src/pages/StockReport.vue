@@ -54,7 +54,6 @@
 
 <script>
     import axios from "axios";
-    import data from "../data"
 
     export default {
         name: "StockReport",
@@ -63,7 +62,7 @@
         },
         data() {
             return {
-                brokers: data.brokerList,
+                brokers: this.common.brokerInfo,
                 brokerCode: '0',
                 titles: [
                     {prop: 'stock_name', label: '个股名称'},
@@ -93,12 +92,12 @@
         },
         methods: {
             getStockCode: function (name) {
-                for (let i = 0; i < data.stockInfoList.length; i++) {
+                for (let i = 0; i < this.common.stockInfoList.length; i++) {
 
-                    if (data.stockInfoList[i].name === name) {
-                        return data.stockInfoList[i].code
+                    if (this.common.stockInfoList[i].name === name) {
+                        return this.common.stockInfoList[i].code
                     }
-                    if (data.stockInfoList[i].code === name) {
+                    if (this.common.stockInfoList[i].code === name) {
                         return name
                     }
                 }

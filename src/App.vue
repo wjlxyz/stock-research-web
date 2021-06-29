@@ -56,9 +56,20 @@
     export default {
         name: 'App',
         created() {
-            // this.common.getAllBrokerInfo()
-            // this.common.getSHStockInfoList()
-            // this.common.getSZStockInfoList()
+            this.common.getAllIndustryBkCode()
+            this.common.getAllRegionBkCode()
+            this.common.getAllBrokerInfo()
+            this.common.getAllConceptBkCode()
+            this.common.getSZStockInfoList()
+            this.common.getSHStockInfoList()
+
+            console.log(this.common.industryBkCode)
+            console.log(this.common.regionBkCode)
+            console.log(this.common.conceptBkCode)
+            console.log(this.common.brokerInfo)
+            console.log(this.common.szStockInfoList)
+            console.log(this.common.shStockInfoList)
+            this.common.stockInfoList = this.common.shStockInfoList.concat(this.common.szStockInfoList)
         },
         data() {
             return {

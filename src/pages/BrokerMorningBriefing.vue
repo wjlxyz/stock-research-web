@@ -48,7 +48,6 @@
 
 <script>
     import axios from "axios";
-    import data from "../data"
 
     export default {
         name: "BrokerMorningBriefing",
@@ -57,7 +56,7 @@
         },
         data() {
             return {
-                brokers: data.brokerList,
+                brokers: this.common.brokerInfo,
                 brokerCode: '',
                 titles: [
                     {prop: 'broker_name', label: '券商'},
