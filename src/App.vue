@@ -47,6 +47,9 @@
                     <router-view></router-view>
                 </el-main>
             </el-container>
+            <footer>
+                <a href="https://beian.miit.gov.cn/">粤ICP备2020137396号-1</a>
+            </footer>
         </el-container>
     </div>
 </template>
@@ -117,5 +120,12 @@
     }
     .el-submenu__title {
 
+    }
+    footer {
+        position: absolute;
+        left: 50%;
+        margin-top: 40px;
+        bottom: 0%;
+        text-align: center;
     }
 </style>
